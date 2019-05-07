@@ -1,36 +1,56 @@
-## Welcome to GitHub Pages
+```javascript
+For each CS in CS_List {
 
-You can use the [editor on GitHub](https://github.com/vs4vijay/machine-learning-101/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+    # In case of Never Ending
+    if(CS.End_datetime == null) {
+        
+        # In case of "YEARLY"
+        if(CS.type == "YEARLY") {
+            if(DAY_MONTH(CS.start_datetime) == DAY_MONTH(Cleaning_end_time) ) {
+                # Do Nothing
+            } else {
+                # Continue to next CS
+                continue
+            }
+        } else {
+            # In case of "DAILY", "WEEKLY" and "MONTHLY"
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+            # This “Cleaning_end_time” is already converted into Timezone Aware object,           hence get the weekday only.
+            Week_day = Get Week Day of Cleaning_end_time
 
-### Markdown
+            if(CS.days.contains(Week_day)) {
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+                # In case of "MONTHLY"
+                Month_week = Get Which Week of Month from Cleaning_end_time
 
-```markdown
-Syntax highlighted code block
+                if(CS.type == "MONTHLY") {
+                    if(CS.week_in_month == Month_week) {
+                        # Do Nothing
+                    } else {
+                        # Continue to next CS
+                        continue
+                    }
+                } else {
+                    # Do Nothing for "DAILY" and "WEEKLY"
+                }
+            }
+        }
 
-# Header 1
-## Header 2
-### Header 3
+        # Check "end_time" for frequencies
+        For each Frequency in CS.frequencies {
+            if(Cleaning_start_time <= Frequency.end_time <= Cleaning_end_time) {
+                # Consider this CS for returning rooms
+            }
+        }
 
-- Bulleted
-- List
+    } else {
 
-1. Numbered
-2. List
+        # Does Not Repeat (Not Never Ending Case)
+        # Just check if cleaning_end_time is in between Cleaning Schedules span
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+        if(CS.start_datetime <= Cleaning_end_time <= CS.end_datetime) {
+            # Check for each frequency as above
+        }
+    }
+}
 ```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/vs4vijay/machine-learning-101/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
